@@ -3,8 +3,7 @@
 {% load thumbnail %}
 {% load cache %}
 {% block content %} 
-<div class="container"> 
-  <h1>Последние обновления в ленте</h1>
+{% include 'posts/includes/switcher.html' %} 
     {% for post in page_obj %}
     <article>
       <ul>
@@ -37,4 +36,4 @@
     {% endfor %}
   {% include 'posts/includes/paginator.html' %}
 </div>
-{%endblock%}  
+{% endblock %}  

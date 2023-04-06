@@ -50,6 +50,7 @@ class PostContextTests(TestCase):
             group=cls.group,
             image=uploaded
         )
+        
 
     @classmethod
     def tearDownClass(cls):
@@ -62,7 +63,7 @@ class PostContextTests(TestCase):
         self.authorized_client.force_login(self.user)
 
     def test_post_index_show_correct_context(self):
-        response = self.authorized_client.get(reverse('posts:index'))
+        response = self.authorized_client.get(reverse('posts:index')) 
         first_object = response.context['page_obj'][0]
         self.assertEqual(first_object.text, 'Тестовый пост')
         self.assertEqual(first_object.author.username, 'author')
