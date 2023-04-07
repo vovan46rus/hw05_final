@@ -8,7 +8,8 @@ from .models import Follow, Group, Post
 from .utils import get_paginator
 
 User = get_user_model()
-FOLLOW =  Follow.objects.filter
+FOLLOW = Follow.objects.filter
+
 
 @cache_page(20)
 def index(request):
@@ -94,6 +95,7 @@ def post_edit(request, post_id):
 @login_required
 def add_comment(request, post_id):
     post = get_object_or_404(Post, id=post_id)
+    comments = post.comments.all()
     form = CommentForm(request.POST or None)
     if form.is_valid():
         comment = form.save(commit=False)
@@ -101,6 +103,12 @@ def add_comment(request, post_id):
         comment.post = post
         comment.save()
         return redirect('posts:post_detail', post_id=post_id)
+    context = {
+        'post': post,
+        'form': form,
+        'comments': comments,
+    }
+    return render(request, 'posts/post_detail.html', context)
 
 
 @login_required
@@ -113,9 +121,10 @@ def follow_index(request):
 
 @login_required
 def profile_follow(request, username):
-    if request.user != get_object_or_404(User, username=username):
+    requser = request.user
+    if requser != get_object_or_404(User, username=username):
         Follow.objects.get_or_create(
-            user=request.user,
+            user=requser,
             author=User.objects.get(username=username)
         )
     return redirect('posts:profile', username=username)
