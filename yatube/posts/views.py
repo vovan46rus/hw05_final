@@ -8,7 +8,6 @@ from .models import Follow, Group, Post
 from .utils import get_paginator
 
 User = get_user_model()
-FOLLOW = Follow.objects.filter
 
 
 @cache_page(20)
@@ -121,22 +120,23 @@ def follow_index(request):
 
 @login_required
 def profile_follow(request, username):
-    requser = request.user
-    if requser != get_object_or_404(User, username=username):
+    usname = username
+    if request.user != get_object_or_404(User, username=usname):
         Follow.objects.get_or_create(
-            user=requser,
-            author=User.objects.get(username=username)
+            user=request.user,
+            author=User.objects.get(username=usname)
         )
-    return redirect('posts:profile', username=username)
+    return redirect('posts:profile', username=usname)
 
 
 @login_required
 def profile_unfollow(request, username):
+    follow = Follow.objects.filter
     fol_author = get_object_or_404(User, username=username)
-    if FOLLOW(
+    if follow(
             user=request.user,
             author=fol_author).exists():
-        FOLLOW(
+        follow(
             user=request.user,
             author=fol_author).delete()
     return redirect('posts:profile', username)

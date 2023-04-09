@@ -105,6 +105,9 @@ class PostPagesTests(TestCase):
         self.assertEqual(
             post.id, self.post.id
         )
+        self.assertEqual(
+            post.image, self.post.image
+        )
 
     def test_index_show_correct_context(self):
         response = self.client.get(self.index_url)
