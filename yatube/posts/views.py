@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.cache import cache_page
-from django.core.exceptions import PermissionDenied
+
 from .forms import CommentForm, PostForm
 from .models import Follow, Group, Post
 from .utils import get_paginator
@@ -120,13 +120,10 @@ def follow_index(request):
 
 @login_required
 def profile_follow(request, username):
-    usname = username
-    if request.user != get_object_or_404(User, username=usname):
-        Follow.objects.get_or_create(
-            user=request.user,
-            author=User.objects.get(username=usname)
-        )
-    return redirect('posts:profile', username=usname)
+    if username != request.user.username:
+        author = get_object_or_404(User, username=username)
+        Follow.objects.get_or_create(user=request.user, author=author)
+    return redirect('posts:profile', username=username)
 
 
 @login_required
