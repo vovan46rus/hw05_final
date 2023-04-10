@@ -13,7 +13,7 @@ CACHES = {
 
 SECRET_KEY = '@38=jia9h-od+cy^^4igjai6496&^zr#+u=(x9ha)lp(m^^h6h'
 
-DEBUG = True
+DEBUG = True 
 
 POSTS_COUNT = 10
 
